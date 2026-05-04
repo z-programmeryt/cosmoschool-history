@@ -1,0 +1,26 @@
+{
+  "name": "কোয়ান্টাম কসমো স্কুল ও কলেজ ইতিহাস",
+  "short_name": "কোয়ান্টাম কসমো",
+  "description": "১৯৯৯ সাল থেকে বান্দরবানের লামায় কোয়ান্টাম কসমো স্কুল ও কলেজের যাত্রা। পার্বত্য বাংলাদেশের আদিবাসী ও বঞ্চিত শিশুদের শিক্ষা ও মানবিক বিকাশে নিবেদিত।",
+  "start_url": "https://cosmoschool-history.netlify.app/",
+  "display": "standalone",
+  "background_color": "#1a5c38",
+  "theme_color": "#1a5c38",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "https://files.quantummethod.org.bd/resize/30/-/media/image/static_content/cosmoschool_nav_menu_20250416.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "https://files.quantummethod.org.bd/resize/30/-/media/image/static_content/cosmoschool_nav_menu_20250416.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["education", "nonprofit", "social"],
+  "lang": "bn-BD"
+}
