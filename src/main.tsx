@@ -1,30 +1,27 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import './index.css'
-import App from './App.tsx'
+import WorkingApp from './WorkingApp.tsx'
 
 console.log('main.tsx loaded');
 
-// Wait for DOM to be ready
-function mountApp() {
-  const root = document.getElementById('root');
-  console.log('Root element:', root);
-  
-  if (root) {
+// Simple direct mount
+const root = document.getElementById('root');
+console.log('Root element:', root);
+
+if (root) {
+  try {
     createRoot(root).render(
       <StrictMode>
-        <App />
+        <WorkingApp />
       </StrictMode>
     );
-    console.log('React app mounted');
-  } else {
-    console.error('Root element not found, retrying...');
-    setTimeout(mountApp, 100);
+    console.log('React app mounted successfully');
+  } catch (error) {
+    console.error('Error mounting React app:', error);
+    root.innerHTML = '<div style="background: red; color: white; padding: 20px;">React Error occurred</div>';
   }
-}
-
-// Try mounting immediately and also on DOM load
-mountApp();
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', mountApp);
+} else {
+  console.error('Root element not found');
+  document.body.innerHTML = '<div style="background: red; color: white; padding: 20px;">Root element not found!</div>';
 }
