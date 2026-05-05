@@ -1,7 +1,7 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import './index.css'
-import WorkingApp from './WorkingApp.tsx'
+import App from './App.tsx'
 
 console.log('main.tsx loaded');
 
@@ -13,7 +13,7 @@ if (root) {
   try {
     createRoot(root).render(
       <StrictMode>
-        <WorkingApp />
+        <App />
       </StrictMode>
     );
     console.log('React app mounted successfully');
