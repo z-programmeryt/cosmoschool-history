@@ -1,32 +1,22 @@
-@import "tailwindcss/base";
-@import "tailwindcss/components";
-@import "tailwindcss/utilities";
-
-/* Bengali Font Setup */
+/* Basic reset */
 * {
   box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
-html {
-  scroll-behavior: smooth;
-  scroll-padding-top: 80px;
-}
-
-body {
-  font-family: 'Hind Siliguri', 'Noto Serif Bengali', sans-serif;
-  background-color: #fafaf8;
-  color: #1a1a1a;
+html, body {
+  height: 100%;
+  font-family: Arial, sans-serif;
+  background-color: #f5f5f5;
+  color: #333;
   overflow-x: hidden;
 }
 
-/* Dark Theme Styles */
-.dark body {
-  background-color: #0f172a;
-  color: #f8fafc;
-}
-
-.dark .bg-white {
-  background-color: #1e293b !important;
+#root {
+  min-height: 100vh;
+  width: 100%;
+  display: block;
 }
 
 .dark .bg-gray-50 {
