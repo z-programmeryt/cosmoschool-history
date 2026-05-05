@@ -1,7 +1,7 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import './index.css'
-import SimpleApp from './SimpleApp.tsx'
+import App from './App.tsx'
 
 console.log('main.tsx loaded');
 
@@ -13,7 +13,7 @@ function mountApp() {
   if (root) {
     createRoot(root).render(
       <StrictMode>
-        <SimpleApp />
+        <App />
       </StrictMode>
     );
     console.log('React app mounted');
