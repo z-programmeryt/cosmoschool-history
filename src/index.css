@@ -19,9 +19,22 @@ body {
   overflow-x: hidden;
 }
 
-#root {
-  min-height: 100vh;
-  width: 100%;
+/* Dark Theme Styles */
+.dark body {
+  background-color: #0f172a;
+  color: #f8fafc;
+}
+
+.dark .bg-white {
+  background-color: #1e293b !important;
+}
+
+.dark .bg-gray-50 {
+  background-color: #334155 !important;
+}
+
+.dark .bg-gray-100 {
+  background-color: #475569 !important;
 }
 
 .dark .text-gray-900 {
