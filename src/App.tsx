@@ -413,13 +413,10 @@ function Hero() {
           ))}
         </h1>
         <div className="flex justify-center mb-10 sm:mb-16 reveal-bottom delay-300">
-           <p className="text-sm sm:text-xl text-white/70 tracking-[0.3em] font-medium uppercase border-y border-white/20 py-2 px-6">
+           <p className="text-base sm:text-2xl text-white tracking-[0.3em] font-bold uppercase border-y-2 border-white/30 py-3 px-10 drop-shadow-2xl">
              একটু একটু করে পথ চলা...
            </p>
         </div>
-        <p className="text-lg sm:text-3xl lg:text-4xl text-white/90 mb-10 sm:mb-16 max-w-4xl mx-auto drop-shadow-lg reveal-bottom delay-500 font-light italic leading-relaxed tracking-wide px-4">
-          {subtitle}
-        </p>
         <div className="flex flex-col sm:flex-row gap-4 sm:gap-8 justify-center items-center reveal-bottom delay-700 px-6">
           <a
             ref={btn1Ref}
@@ -439,9 +436,9 @@ function Hero() {
       </div>
       
       {/* Scroll Indicator */}
-      <div className="absolute bottom-10 left-1/2 -translate-x-1/2 z-20 flex flex-col items-center gap-2 animate-bounce opacity-70">
-        <span className="text-white text-xs font-bold tracking-widest uppercase">স্ক্রল করুন</span>
-        <div className="w-px h-12 bg-white/50" />
+      <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-20 flex flex-col items-center gap-1 animate-bounce opacity-80 cursor-pointer" onClick={() => document.getElementById('intro')?.scrollIntoView({ behavior: 'smooth' })}>
+        <span className="text-white text-[10px] font-black tracking-[0.4em] uppercase mb-1">স্ক্রল করুন</span>
+        <IconChevronDown className="w-6 h-6 text-white" />
       </div>
     </section>
   );
@@ -933,8 +930,55 @@ function SuccessStories() {
   );
 }
 
-// Footer
+// --- Legal Modals ---
+function LegalModal({ isOpen, onClose, title, content }: { isOpen: boolean, onClose: () => void, title: string, content: React.ReactNode }) {
+  if (!isOpen) return null;
+  return (
+    <div className="fixed inset-0 z-[300] flex items-center justify-center p-4">
+      <div className="absolute inset-0 bg-slate-950/80 backdrop-blur-xl" onClick={onClose} />
+      <div className="relative bg-white dark:bg-slate-900 w-full max-w-4xl max-h-[80vh] overflow-y-auto rounded-[2.5rem] p-8 sm:p-12 shadow-2xl border border-gray-100 dark:border-slate-800 animate-scaleIn">
+        <button onClick={onClose} className="absolute top-6 right-6 p-2 rounded-full hover:bg-gray-100 dark:hover:bg-slate-800 transition-colors">
+          <IconX className="w-6 h-6 text-gray-500" />
+        </button>
+        <h2 className="text-3xl font-bold mb-8 serif-font text-gradient-gold">{title}</h2>
+        <div className="prose dark:prose-invert max-w-none text-slate-600 dark:text-slate-300 space-y-6 text-justify">
+          {content}
+        </div>
+        <div className="mt-12 flex justify-end">
+          <button onClick={onClose} className="px-8 py-3 bg-[#065f46] text-white font-bold rounded-full hover:bg-[#047857] transition-all">বন্ধ করুন</button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+const PRIVACY_CONTENT = (
+  <>
+    <p>কোয়ান্টাম কসমো স্কুল ও কলেজ আপনার গোপনীয়তাকে অত্যন্ত গুরুত্ব সহকারে বিবেচনা করে। এই প্রাইভেসি পলিসি ডকুমেন্টে আমরা কোন ধরনের তথ্য সংগ্রহ করি এবং তা কীভাবে ব্যবহার করি সে সম্পর্কে বিস্তারিত আলোচনা করা হয়েছে।</p>
+    <h3 className="text-xl font-bold text-[#065f46] dark:text-emerald-400 mt-6">১. তথ্য সংগ্রহ</h3>
+    <p>আমরা আমাদের ওয়েবসাইট ভিজিটরদের ব্যক্তিগত তথ্য (যেমন নাম, ইমেইল) শুধুমাত্র তখনই সংগ্রহ করি যখন আপনি স্বেচ্ছায় আমাদের কোনো ফর্ম পূরণ করেন বা ডোনেট করেন।</p>
+    <h3 className="text-xl font-bold text-[#065f46] dark:text-emerald-400 mt-6">২. তথ্যের ব্যবহার</h3>
+    <p>সংগৃহীত তথ্যগুলো আমাদের ওয়েবসাইটের অভিজ্ঞতা উন্নত করতে, আপনার জিজ্ঞাসার উত্তর দিতে এবং ডোনেশন সংক্রান্ত যোগাযোগের জন্য ব্যবহার করা হয়।</p>
+    <h3 className="text-xl font-bold text-[#065f46] dark:text-emerald-400 mt-6">৩. কুকিজ (Cookies)</h3>
+    <p>গুগল অ্যাডসেন্স এবং এনালিটিক্স ব্যবহারের সুবিধার্থে আমরা কুকিজ ব্যবহার করতে পারি। এটি ব্যবহারকারীদের ব্রাউজিং অভ্যাসের ওপর ভিত্তি করে আরও ভালো অ্যাড দেখাতে সাহায্য করে।</p>
+  </>
+);
+
+const TERMS_CONTENT = (
+  <>
+    <p>আমাদের ওয়েবসাইট ব্যবহার করার মাধ্যমে আপনি নিচের শর্তাবলি মেনে নিতে সম্মত হচ্ছেন।</p>
+    <h3 className="text-xl font-bold text-[#065f46] dark:text-emerald-400 mt-6">১. ব্যবহারের শর্ত</h3>
+    <p>এই সাইটের সমস্ত কন্টেন্ট (টেক্সট, ছবি, ভিডিও) কোয়ান্টাম কসমো স্কুল ও কলেজের নিজস্ব সম্পদ। অনুমতি ছাড়া এগুলো বাণিজ্যিক উদ্দেশ্যে ব্যবহার করা আইনত দণ্ডনীয়।</p>
+    <h3 className="text-xl font-bold text-[#065f46] dark:text-emerald-400 mt-6">২. ডোনেশন পলিসি</h3>
+    <p>ডোনেশনের মাধ্যমে প্রাপ্ত অর্থ শিশুদের শিক্ষা ও আবাসন সহায়তায় ব্যয় করা হয়। ডোনেশন সম্পন্ন হওয়ার পর তা সাধারণত রিফান্ডযোগ্য নয়।</p>
+    <h3 className="text-xl font-bold text-[#065f46] dark:text-emerald-400 mt-6">৩. দায়বদ্ধতা</h3>
+    <p>আমরা সাইটের তথ্য নির্ভুল রাখার সর্বোচ্চ চেষ্টা করি, তবে টেকনিক্যাল ত্রুটি বা তথ্যের ভুলবশত অসঙ্গতির জন্য আমরা দায়বদ্ধ নই।</p>
+  </>
+);
+
 function Footer() {
+  const [modal, setModal] = useState<'privacy' | 'terms' | null>(null);
+
   return (
     <footer className="bg-[#0f172a] text-white pt-24 pb-12 relative overflow-hidden transition-colors border-t border-[#065f46]/20">
       {/* Decorative Blobs for Footer */}
@@ -1034,11 +1078,24 @@ function Footer() {
             &copy; {new Date().getFullYear()} কোয়ান্টাম কসমো স্কুল ও কলেজ. সর্বস্বত্ব সংরক্ষিত।
           </p>
           <div className="flex gap-8 text-slate-500 text-sm">
-            <a href="#" className="hover:text-white transition-colors">প্রাইভেসি পলিসি</a>
-            <a href="#" className="hover:text-white transition-colors">শর্তাবলি</a>
+            <button onClick={() => setModal('privacy')} className="hover:text-white transition-colors">প্রাইভেসি পলিসি</button>
+            <button onClick={() => setModal('terms')} className="hover:text-white transition-colors">শর্তাবলি</button>
           </div>
         </div>
       </div>
+
+      <LegalModal 
+        isOpen={modal === 'privacy'} 
+        onClose={() => setModal(null)} 
+        title="প্রাইভেসি পলিসি" 
+        content={PRIVACY_CONTENT} 
+      />
+      <LegalModal 
+        isOpen={modal === 'terms'} 
+        onClose={() => setModal(null)} 
+        title="শর্তাবলি ও ব্যবহারবিধি" 
+        content={TERMS_CONTENT} 
+      />
     </footer>
   );
 }
