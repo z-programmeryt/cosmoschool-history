@@ -1,4 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
+import { BrowserRouter, Routes, Route, Link, useLocation } from 'react-router-dom';
+import { PRIVACY_CONTENT, TERMS_CONTENT } from './LegalContent';
 import { 
   IconCalendar,
   IconBrandFacebook,
@@ -18,7 +20,6 @@ import {
   IconSun,
   IconMoon,
   IconHeart,
-  IconClock,
   IconMapPin,
   IconMail,
   IconPhone
@@ -111,28 +112,21 @@ function useMagnetic(ref: React.RefObject<HTMLElement>) {
 // ─────────────────────────────────────────────
 // THEME MANAGEMENT
 // ─────────────────────────────────────────────
-type Theme = 'light' | 'dark' | 'system';
+type Theme = 'light' | 'dark';
 
 function useTheme() {
   const [theme, setTheme] = useState<Theme>(() => {
     if (typeof window !== 'undefined') {
       const stored = localStorage.getItem('theme') as Theme;
-      return stored || 'system';
+      return stored || 'light';
     }
-    return 'system';
+    return 'light';
   });
 
   useEffect(() => {
     const root = window.document.documentElement;
     root.classList.remove('light', 'dark');
-
-    if (theme === 'system') {
-      const systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-      root.classList.add(systemTheme);
-    } else {
-      root.classList.add(theme);
-    }
-
+    root.classList.add(theme);
     localStorage.setItem('theme', theme);
   }, [theme]);
 
@@ -148,16 +142,12 @@ function ThemeToggle() {
   return (
     <div className="relative">
       <button
-        onClick={() => {
-          const next = theme === 'light' ? 'dark' : theme === 'dark' ? 'system' : 'light';
-          setTheme(next);
-        }}
-        className="p-2 rounded-lg bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
+        onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')}
+        className="p-2 rounded-xl bg-gray-100 dark:bg-slate-800 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-slate-700 transition-all border border-gray-200 dark:border-slate-700 shadow-sm"
         aria-label="Toggle theme"
+        title={theme === 'light' ? 'Dark Mode' : 'Light Mode'}
       >
-        {theme === 'light' && <IconSun className="w-5 h-5 text-gray-700" />}
-        {theme === 'dark' && <IconMoon className="w-5 h-5 text-gray-300" />}
-        {theme === 'system' && <div className="w-5 h-5" />}
+        {theme === 'light' ? <IconMoon className="w-5 h-5" /> : <IconSun className="w-5 h-5" />}
       </button>
     </div>
   );
@@ -383,7 +373,6 @@ const SUCCESS_STORIES = [
 // --- Hero Component ---
 function Hero() {
   const title = "কোয়ান্টাম কসমো স্কুল ও কলেজ";
-  const subtitle = "একটু একটু করে পথ চলা...";
   const words = title.split(' ');
   const btn1Ref = useRef<HTMLAnchorElement>(null);
   const btn2Ref = useRef<HTMLAnchorElement>(null);
@@ -577,7 +566,7 @@ function Navbar() {
           <div className="flex items-center justify-between h-16 lg:h-20">
             {/* Logos */}
             <div className="flex items-center gap-2 sm:gap-3">
-              <a href="https://www.quantummethod.org.bd/" target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 sm:gap-2">
+              <Link to="/" className="flex items-center gap-1.5 sm:gap-2">
                 <img
                   src="https://files.quantummethod.org.bd/resize/30/-/media/image/static_content/homepage_menu_logo_20240624.png"
                   alt="Quantum Logo"
@@ -589,7 +578,7 @@ function Navbar() {
                   alt="Cosmo School Logo"
                   className="h-6 sm:h-8 w-auto"
                 />
-              </a>
+              </Link>
               <span className="text-xs sm:text-sm font-bold text-[#065f46] dark:text-emerald-400 leading-tight max-w-[120px] sm:max-w-none">
                 কোয়ান্টাম কসমো স্কুল ও কলেজ
               </span>
@@ -600,6 +589,8 @@ function Navbar() {
                 <a
                   key={link.label}
                   href={link.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="px-3 py-2 text-sm font-semibold text-gray-700 dark:text-gray-200 hover:text-[#065f46] dark:hover:text-emerald-400 transition-colors"
                 >
                   {link.label}
@@ -779,6 +770,30 @@ function StatsSection() {
   );
 }
 
+// Video Tour Section
+function VideoTour() {
+  return (
+    <section className="py-24 bg-white dark:bg-slate-950 relative overflow-hidden">
+      <div className="max-w-7xl mx-auto px-6">
+        <div className="text-center mb-16 reveal-bottom">
+          <h2 className="text-4xl sm:text-6xl font-bold mb-6 serif-font text-gradient-gold">ভিডিও ট্যুর</h2>
+          <p className="text-slate-500 dark:text-gray-400 text-lg sm:text-xl max-w-3xl mx-auto">কোয়ান্টাম কসমো স্কুল ও কলেজের শিশুদের দৈনন্দিন জীবন ও শিক্ষার এক ঝলক।</p>
+        </div>
+        <div className="relative aspect-video rounded-[3rem] overflow-hidden shadow-3xl ring-1 ring-black/5 reveal-bottom delay-300">
+          <iframe
+            className="w-full h-full"
+            src="https://www.youtube.com/embed/QAoKvkWWjgU?si=hJckuAaeBg-4CBe3"
+            title="Quantum Cosmo School Story"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowFullScreen
+          ></iframe>
+          <div className="absolute inset-0 pointer-events-none ring-1 ring-inset ring-white/20 rounded-[3rem]" />
+        </div>
+      </div>
+    </section>
+  );
+}
+
 // Timeline Section
 function TimelineSection() {
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
@@ -930,55 +945,9 @@ function SuccessStories() {
   );
 }
 
-// --- Legal Modals ---
-function LegalModal({ isOpen, onClose, title, content }: { isOpen: boolean, onClose: () => void, title: string, content: React.ReactNode }) {
-  if (!isOpen) return null;
-  return (
-    <div className="fixed inset-0 z-[300] flex items-center justify-center p-4">
-      <div className="absolute inset-0 bg-slate-950/80 backdrop-blur-xl" onClick={onClose} />
-      <div className="relative bg-white dark:bg-slate-900 w-full max-w-4xl max-h-[80vh] overflow-y-auto rounded-[2.5rem] p-8 sm:p-12 shadow-2xl border border-gray-100 dark:border-slate-800 animate-scaleIn">
-        <button onClick={onClose} className="absolute top-6 right-6 p-2 rounded-full hover:bg-gray-100 dark:hover:bg-slate-800 transition-colors">
-          <IconX className="w-6 h-6 text-gray-500" />
-        </button>
-        <h2 className="text-3xl font-bold mb-8 serif-font text-gradient-gold">{title}</h2>
-        <div className="prose dark:prose-invert max-w-none text-slate-600 dark:text-slate-300 space-y-6 text-justify">
-          {content}
-        </div>
-        <div className="mt-12 flex justify-end">
-          <button onClick={onClose} className="px-8 py-3 bg-[#065f46] text-white font-bold rounded-full hover:bg-[#047857] transition-all">বন্ধ করুন</button>
-        </div>
-      </div>
-    </div>
-  );
-}
 
-const PRIVACY_CONTENT = (
-  <>
-    <p>কোয়ান্টাম কসমো স্কুল ও কলেজ আপনার গোপনীয়তাকে অত্যন্ত গুরুত্ব সহকারে বিবেচনা করে। এই প্রাইভেসি পলিসি ডকুমেন্টে আমরা কোন ধরনের তথ্য সংগ্রহ করি এবং তা কীভাবে ব্যবহার করি সে সম্পর্কে বিস্তারিত আলোচনা করা হয়েছে।</p>
-    <h3 className="text-xl font-bold text-[#065f46] dark:text-emerald-400 mt-6">১. তথ্য সংগ্রহ</h3>
-    <p>আমরা আমাদের ওয়েবসাইট ভিজিটরদের ব্যক্তিগত তথ্য (যেমন নাম, ইমেইল) শুধুমাত্র তখনই সংগ্রহ করি যখন আপনি স্বেচ্ছায় আমাদের কোনো ফর্ম পূরণ করেন বা ডোনেট করেন।</p>
-    <h3 className="text-xl font-bold text-[#065f46] dark:text-emerald-400 mt-6">২. তথ্যের ব্যবহার</h3>
-    <p>সংগৃহীত তথ্যগুলো আমাদের ওয়েবসাইটের অভিজ্ঞতা উন্নত করতে, আপনার জিজ্ঞাসার উত্তর দিতে এবং ডোনেশন সংক্রান্ত যোগাযোগের জন্য ব্যবহার করা হয়।</p>
-    <h3 className="text-xl font-bold text-[#065f46] dark:text-emerald-400 mt-6">৩. কুকিজ (Cookies)</h3>
-    <p>গুগল অ্যাডসেন্স এবং এনালিটিক্স ব্যবহারের সুবিধার্থে আমরা কুকিজ ব্যবহার করতে পারি। এটি ব্যবহারকারীদের ব্রাউজিং অভ্যাসের ওপর ভিত্তি করে আরও ভালো অ্যাড দেখাতে সাহায্য করে।</p>
-  </>
-);
-
-const TERMS_CONTENT = (
-  <>
-    <p>আমাদের ওয়েবসাইট ব্যবহার করার মাধ্যমে আপনি নিচের শর্তাবলি মেনে নিতে সম্মত হচ্ছেন।</p>
-    <h3 className="text-xl font-bold text-[#065f46] dark:text-emerald-400 mt-6">১. ব্যবহারের শর্ত</h3>
-    <p>এই সাইটের সমস্ত কন্টেন্ট (টেক্সট, ছবি, ভিডিও) কোয়ান্টাম কসমো স্কুল ও কলেজের নিজস্ব সম্পদ। অনুমতি ছাড়া এগুলো বাণিজ্যিক উদ্দেশ্যে ব্যবহার করা আইনত দণ্ডনীয়।</p>
-    <h3 className="text-xl font-bold text-[#065f46] dark:text-emerald-400 mt-6">২. ডোনেশন পলিসি</h3>
-    <p>ডোনেশনের মাধ্যমে প্রাপ্ত অর্থ শিশুদের শিক্ষা ও আবাসন সহায়তায় ব্যয় করা হয়। ডোনেশন সম্পন্ন হওয়ার পর তা সাধারণত রিফান্ডযোগ্য নয়।</p>
-    <h3 className="text-xl font-bold text-[#065f46] dark:text-emerald-400 mt-6">৩. দায়বদ্ধতা</h3>
-    <p>আমরা সাইটের তথ্য নির্ভুল রাখার সর্বোচ্চ চেষ্টা করি, তবে টেকনিক্যাল ত্রুটি বা তথ্যের ভুলবশত অসঙ্গতির জন্য আমরা দায়বদ্ধ নই।</p>
-  </>
-);
 
 function Footer() {
-  const [modal, setModal] = useState<'privacy' | 'terms' | null>(null);
-
   return (
     <footer className="bg-[#0f172a] text-white pt-24 pb-12 relative overflow-hidden transition-colors border-t border-[#065f46]/20">
       {/* Decorative Blobs for Footer */}
@@ -1004,10 +973,10 @@ function Footer() {
               ১৯৯৯ সাল থেকে বান্দরবানের লামায় আদিবাসী ও বঞ্চিত শিশুদের আলোকিত মানুষ হিসেবে গড়ে তোলার এক নিরন্তর মিশন। আপনার সহযোগিতা এই শিশুদের আগামীর স্বপ্নকে সফল করতে পারে।
             </p>
             <div className="flex gap-5">
-              <a href="https://www.facebook.com/QuantumMethodBd" target="_blank" rel="noopener noreferrer" className="w-12 h-12 rounded-xl bg-white/5 flex items-center justify-center hover:bg-[#065f46] hover:scale-110 transition-all border border-white/10 group">
+              <a href="https://www.facebook.com/qcsc2001/" target="_blank" rel="noopener noreferrer" className="w-12 h-12 rounded-xl bg-white/5 flex items-center justify-center hover:bg-[#065f46] hover:scale-110 transition-all border border-white/10 group">
                 <IconBrandFacebook className="w-6 h-6 text-white/70 group-hover:text-white" />
               </a>
-              <a href="https://www.youtube.com/quantummethod" target="_blank" rel="noopener noreferrer" className="w-12 h-12 rounded-xl bg-white/5 flex items-center justify-center hover:bg-red-600 hover:scale-110 transition-all border border-white/10 group">
+              <a href="https://youtube.com/@qcsc2001?si=CChBbcC5nkxZaF5u" target="_blank" rel="noopener noreferrer" className="w-12 h-12 rounded-xl bg-white/5 flex items-center justify-center hover:bg-red-600 hover:scale-110 transition-all border border-white/10 group">
                 <IconBrandYoutube className="w-6 h-6 text-white/70 group-hover:text-white" />
               </a>
               <a href="https://quantummethod.org.bd/bn/contacts" target="_blank" rel="noopener noreferrer" className="w-12 h-12 rounded-xl bg-white/5 flex items-center justify-center hover:bg-[#d4af37] hover:scale-110 transition-all border border-white/10 group">
@@ -1063,6 +1032,14 @@ function Footer() {
             <div className="space-y-2">
               <p className="text-slate-400 font-medium">+৮৮ ০১৩১৩ ৪৮৬৫৩০</p>
               <p className="text-slate-400 font-medium">+৮৮ ০১৮৮৫ ৩১৮০৮৩</p>
+              <p className="text-slate-400 font-medium">+৮৮ ০১৩১৩ ৪৮৬৫৩৭</p>
+              <p className="text-slate-400 font-medium">+৮৮ ০১৩০৬ ৪১৩১৬৩</p>
+              <div className="pt-2 border-t border-white/10 mt-2">
+                <p className="text-[#d4af37] text-sm font-bold flex items-center gap-2">
+                  <IconMail className="w-4 h-4" />
+                  cosmoschool@quantummethod.org.bd
+                </p>
+              </div>
             </div>
           </div>
 
@@ -1078,25 +1055,61 @@ function Footer() {
             &copy; {new Date().getFullYear()} কোয়ান্টাম কসমো স্কুল ও কলেজ. সর্বস্বত্ব সংরক্ষিত।
           </p>
           <div className="flex gap-8 text-slate-500 text-sm">
-            <button onClick={() => setModal('privacy')} className="hover:text-white transition-colors">প্রাইভেসি পলিসি</button>
-            <button onClick={() => setModal('terms')} className="hover:text-white transition-colors">শর্তাবলি</button>
+            <Link to="/privacy-policy" className="hover:text-white transition-colors">প্রাইভেসি পলিসি</Link>
+            <Link to="/terms-of-service" className="hover:text-white transition-colors">শর্তাবলি</Link>
           </div>
         </div>
       </div>
-
-      <LegalModal 
-        isOpen={modal === 'privacy'} 
-        onClose={() => setModal(null)} 
-        title="প্রাইভেসি পলিসি" 
-        content={PRIVACY_CONTENT} 
-      />
-      <LegalModal 
-        isOpen={modal === 'terms'} 
-        onClose={() => setModal(null)} 
-        title="শর্তাবলি ও ব্যবহারবিধি" 
-        content={TERMS_CONTENT} 
-      />
     </footer>
+  );
+}
+
+// --- Page Components ---
+function ScrollToTop() {
+  const { pathname } = useLocation();
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
+  return null;
+}
+
+function HomePage({ progress }: { progress: number }) {
+  useScrollReveal();
+  return (
+    <>
+      <Navbar />
+      <Hero />
+      <StickyMobileActions progress={progress} />
+      <IntroSection />
+      <StatsSection />
+      <VideoTour />
+      <TimelineSection />
+      <SuccessStories />
+      <Footer />
+    </>
+  );
+}
+
+function LegalPage({ title, content }: { title: string, content: React.ReactNode }) {
+  return (
+    <div className="min-h-screen bg-white dark:bg-slate-950">
+      <Navbar />
+      <div className="pt-32 pb-24 px-6">
+        <div className="max-w-4xl mx-auto bg-white dark:bg-slate-900 rounded-[2.5rem] p-10 sm:p-20 shadow-2xl border border-gray-100 dark:border-slate-800">
+          <h1 className="text-4xl sm:text-5xl font-extrabold mb-12 serif-font text-gradient-gold text-center">{title}</h1>
+          <div className="prose dark:prose-invert max-w-none">
+            {content}
+          </div>
+          <div className="mt-16 pt-10 border-t border-gray-100 dark:border-slate-800 flex justify-center">
+            <Link to="/" className="px-10 py-4 bg-[#065f46] text-white font-bold rounded-full hover:bg-[#047857] transition-all flex items-center gap-2 group">
+              <IconHome className="w-5 h-5 group-hover:scale-110 transition-transform" />
+              হোমে ফিরে যান
+            </Link>
+          </div>
+        </div>
+      </div>
+      <Footer />
+    </div>
   );
 }
 
@@ -1104,65 +1117,38 @@ function Footer() {
 export default function App() {
   const progress = useScrollProgress();
   const scrollToTopRef = useRef<HTMLButtonElement>(null);
-  useScrollReveal();
   useMagnetic(scrollToTopRef);
 
-  useEffect(() => {
-    const handleScroll = () => {
-      const glow = document.querySelector('.timeline-glow') as HTMLElement;
-      if (glow) {
-        const scrolled = (window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100;
-        glow.style.height = `${scrolled}%`;
-      }
-    };
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
-
   return (
-    <div className="min-h-screen bg-white dark:bg-slate-950 font-['Hind_Siliguri'] transition-colors duration-700 selection:bg-emerald-200 dark:selection:bg-emerald-900">
-      <CustomCursor />
-      
-      <div 
-        className="fixed top-0 left-0 right-0 z-[100] h-1.5 bg-gradient-to-r from-emerald-400 to-emerald-600 transition-all duration-300" 
-        style={{ width: `${progress}%` }} 
-      />
-      
-      <Navbar />
-      
-      <main id="main">
-        <Hero />
-        <div className="section-divider mx-auto w-4/5 opacity-30" />
-        <IntroSection />
+    <BrowserRouter>
+      <ScrollToTop />
+      <div className="bg-white dark:bg-slate-950 transition-colors duration-500">
+        <CustomCursor />
         
-        {/* SVG Divider */}
-        <div className="relative h-24 bg-white dark:bg-slate-900 overflow-hidden">
-          <svg className="section-divider-svg text-emerald-50 dark:text-slate-800/50" viewBox="0 0 1440 320" preserveAspectRatio="none">
-            <path d="M0,192L48,197.3C96,203,192,213,288,192C384,171,480,117,576,122.7C672,128,768,192,864,208C960,224,1056,192,1152,160C1248,128,1344,96,1392,80L1440,64L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path>
-          </svg>
-        </div>
+        <div 
+          className="fixed top-0 left-0 right-0 z-[100] h-1.5 bg-gradient-to-r from-emerald-400 to-emerald-600 transition-all duration-300" 
+          style={{ width: `${progress}%` }} 
+        />
 
-        <StatsSection />
-        
-        <div className="section-divider mx-auto w-4/5 opacity-30" />
-        <TimelineSection />
-        <SuccessStories />
-      </main>
-      
-      <Footer />
-      
-      {/* Scroll to Top */}
-      <button
-        ref={scrollToTopRef}
-        onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-        className={`fixed bottom-24 sm:bottom-10 right-6 sm:right-10 z-[140] w-14 h-14 bg-[#065f46] text-white rounded-full shadow-2xl flex items-center justify-center transition-all duration-500 transform ${progress > 10 ? 'translate-y-0 opacity-100' : 'translate-y-24 opacity-0'} hover:scale-110 active:scale-95 group magnetic-btn`}
-        aria-label="উপরে যান"
-      >
-        <IconChevronUp className="w-6 h-6 group-hover:-translate-y-1 transition-transform" />
-      </button>
+        <Routes>
+          <Route path="/" element={<HomePage progress={progress} />} />
+          <Route path="/privacy-policy" element={<LegalPage title="Privacy Policy" content={PRIVACY_CONTENT} />} />
+          <Route path="/terms-of-service" element={<LegalPage title="Terms of Service" content={TERMS_CONTENT} />} />
+        </Routes>
 
-      {/* Sticky Mobile Actions */}
-      <StickyMobileActions progress={progress} />
-    </div>
+        {/* Global Scroll to Top Button */}
+        <button
+          ref={scrollToTopRef}
+          onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+          className={`fixed bottom-24 sm:bottom-10 right-6 sm:right-10 z-[140] w-14 h-14 bg-[#065f46] text-white rounded-full shadow-2xl flex items-center justify-center transition-all duration-500 transform ${progress > 10 ? 'translate-y-0 opacity-100' : 'translate-y-24 opacity-0'} hover:scale-110 active:scale-95 group magnetic-btn`}
+          aria-label="উপরে যান"
+        >
+          <IconChevronUp className="w-6 h-6 group-hover:-translate-y-1 transition-transform" />
+        </button>
+
+        {/* Global Sticky Mobile Actions */}
+        <StickyMobileActions progress={progress} />
+      </div>
+    </BrowserRouter>
   );
 }
